@@ -282,19 +282,20 @@
 
         /* Agentes Grid */
         .agentes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             margin-top: 24px;
         }
 
         .agente-card {
             background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
             border: 2px solid #e2e8f0;
-            padding: 24px;
+            padding: 16px;
             border-radius: 12px;
             transition: all 0.3s;
             cursor: pointer;
+            height: fit-content;
         }
 
         .agente-card:hover {
@@ -338,15 +339,16 @@
 
         .agente-name {
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
             color: #1a202c;
+            line-height: 1.3;
         }
 
         .agente-desc {
             font-size: 13px;
             color: #718096;
             line-height: 1.5;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .agente-status {
@@ -847,14 +849,72 @@
 
                 <div class="content-card">
                     <h2>⚙️ Status do Workflow n8n</h2>
-                    <div class="workflow-status">
-                        <div class="workflow-step active">✓ Webhook Ativo</div>
-                        <div class="workflow-step active">✓ Redis Conectado</div>
-                        <div class="workflow-step active">✓ AI Agent Running</div>
-                        <div class="workflow-step active">✓ Supabase OK</div>
-                        <div class="workflow-step active">✓ PostgreSQL Memory</div>
-                        <div class="workflow-step active">✓ Evolution API</div>
-                        <div class="workflow-step disabled">⚠ ElevenLabs (Desabilitado)</div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 20px;">
+                        <div style="padding: 12px; background: #c6f6d5; border-radius: 8px; border-left: 3px solid #48bb78;">
+                            <div style="font-size: 12px; color: #22543d; font-weight: 600;">✓ Webhook Ativo</div>
+                        </div>
+                        <div style="padding: 12px; background: #c6f6d5; border-radius: 8px; border-left: 3px solid #48bb78;">
+                            <div style="font-size: 12px; color: #22543d; font-weight: 600;">✓ Redis Conectado</div>
+                        </div>
+                        <div style="padding: 12px; background: #c6f6d5; border-radius: 8px; border-left: 3px solid #48bb78;">
+                            <div style="font-size: 12px; color: #22543d; font-weight: 600;">✓ AI Agent Running</div>
+                        </div>
+                        <div style="padding: 12px; background: #c6f6d5; border-radius: 8px; border-left: 3px solid #48bb78;">
+                            <div style="font-size: 12px; color: #22543d; font-weight: 600;">✓ Supabase OK</div>
+                        </div>
+                        <div style="padding: 12px; background: #c6f6d5; border-radius: 8px; border-left: 3px solid #48bb78;">
+                            <div style="font-size: 12px; color: #22543d; font-weight: 600;">✓ PostgreSQL Memory</div>
+                        </div>
+                        <div style="padding: 12px; background: #c6f6d5; border-radius: 8px; border-left: 3px solid #48bb78;">
+                            <div style="font-size: 12px; color: #22543d; font-weight: 600;">✓ Evolution API</div>
+                        </div>
+                        <div style="padding: 12px; background: #fed7d7; border-radius: 8px; border-left: 3px solid #f56565;">
+                            <div style="font-size: 12px; color: #742a2a; font-weight: 600;">⚠ ElevenLabs (Off)</div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 30px; margin-bottom: 15px;">🤖 Agentes Ativos (10)</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <div style="padding: 6px 12px; background: #f7fafc; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🛏️ Quartos</span>
+                            <span style="color: #48bb78;">●</span>
+                        </div>
+                        <div style="padding: 6px 12px; background: #f7fafc; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🏊 Instalações</span>
+                            <span style="color: #48bb78;">●</span>
+                        </div>
+                        <div style="padding: 6px 12px; background: #f7fafc; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🍽️ Gastronomia</span>
+                            <span style="color: #48bb78;">●</span>
+                        </div>
+                        <div style="padding: 6px 12px; background: #f7fafc; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🎉 Eventos</span>
+                            <span style="color: #48bb78;">●</span>
+                        </div>
+                        <div style="padding: 6px 12px; background: #f7fafc; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🚪 Check-in</span>
+                            <span style="color: #48bb78;">●</span>
+                        </div>
+                        <div style="padding: 6px 12px; background: #f7fafc; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🛎️ Room Service</span>
+                            <span style="color: #48bb78;">●</span>
+                        </div>
+                        <div style="padding: 6px 12px; background: #f7fafc; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🎭 Concierge</span>
+                            <span style="color: #48bb78;">●</span>
+                        </div>
+                        <div style="padding: 6px 12px; background: #f7fafc; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>📊 CRM</span>
+                            <span style="color: #48bb78;">●</span>
+                        </div>
+                        <div style="padding: 6px 12px; background: #f7fafc; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>💾 Dados</span>
+                            <span style="color: #48bb78;">●</span>
+                        </div>
+                        <div style="padding: 6px 12px; background: #f7fafc; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>✅ Fechamento</span>
+                            <span style="color: #48bb78;">●</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -862,10 +922,116 @@
             <!-- Agentes Section -->
             <div id="agentes" class="content-section">
                 <div class="alert info">
-                    Estes são os 11 agentes especializados extraídos do seu workflow n8n. Clique em cada um para editar.
+                    Estes são os <strong>10 agentes secundários</strong> conectados ao agente principal Flora no n8n. Cada um é um workflow independente especializado.
+                </div>
+
+                <div class="content-card" style="margin-bottom: 24px;">
+                    <h2>📊 Resumo dos Agentes</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Total de Agentes</h3>
+                            <div class="value">10</div>
+                            <div class="change">Agentes secundários ativos</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Workflow Principal</h3>
+                            <div class="value">Flora</div>
+                            <div class="change">ID: jA4WGJa4trr1X9Rp</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Modelo IA</h3>
+                            <div class="value">Gemini</div>
+                            <div class="change">Google Gemini Chat Model</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Memória</h3>
+                            <div class="value">PostgreSQL</div>
+                            <div class="change">Chat Memory ativa</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="agentes-grid">
+                    <div style="padding: 12px 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="editAgente('AGENTE_QUARTOS_ORCAMENTOS')" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 20px;">🛏️</span>
+                            <span style="font-size: 14px; font-weight: 600; color: #2d3748;">AGENTE_QUARTOS_ORCAMENTOS</span>
+                        </div>
+                        <span style="font-size: 11px; color: #48bb78; font-weight: 600;">● Ativo</span>
+                    </div>
+
+                    <div style="padding: 12px 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="editAgente('AGENTE_INSTALACOES')" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 20px;">🏊</span>
+                            <span style="font-size: 14px; font-weight: 600; color: #2d3748;">AGENTE_INSTALACOES</span>
+                        </div>
+                        <span style="font-size: 11px; color: #48bb78; font-weight: 600;">● Ativo</span>
+                    </div>
+
+                    <div style="padding: 12px 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="editAgente('AGENTE_GASTRONOMIA')" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 20px;">🍽️</span>
+                            <span style="font-size: 14px; font-weight: 600; color: #2d3748;">AGENTE_GASTRONOMIA</span>
+                        </div>
+                        <span style="font-size: 11px; color: #48bb78; font-weight: 600;">● Ativo</span>
+                    </div>
+
+                    <div style="padding: 12px 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="editAgente('AGENTE_EVENTOS')" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 20px;">🎉</span>
+                            <span style="font-size: 14px; font-weight: 600; color: #2d3748;">AGENTE_EVENTOS</span>
+                        </div>
+                        <span style="font-size: 11px; color: #48bb78; font-weight: 600;">● Ativo</span>
+                    </div>
+
+                    <div style="padding: 12px 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="editAgente('AGENTE_CHECKIN_CHECKOUT')" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 20px;">🚪</span>
+                            <span style="font-size: 14px; font-weight: 600; color: #2d3748;">AGENTE_CHECKIN_CHECKOUT</span>
+                        </div>
+                        <span style="font-size: 11px; color: #48bb78; font-weight: 600;">● Ativo</span>
+                    </div>
+
+                    <div style="padding: 12px 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="editAgente('AGENTE_ROOM_SERVICE')" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 20px;">🛎️</span>
+                            <span style="font-size: 14px; font-weight: 600; color: #2d3748;">AGENTE_ROOM_SERVICE</span>
+                        </div>
+                        <span style="font-size: 11px; color: #48bb78; font-weight: 600;">● Ativo</span>
+                    </div>
+
+                    <div style="padding: 12px 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="editAgente('AGENTE_CONCIERGE_RESERVAS')" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 20px;">🎭</span>
+                            <span style="font-size: 14px; font-weight: 600; color: #2d3748;">AGENTE_CONCIERGE_RESERVAS</span>
+                        </div>
+                        <span style="font-size: 11px; color: #48bb78; font-weight: 600;">● Ativo</span>
+                    </div>
+
+                    <div style="padding: 12px 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="editAgente('AGENTE_CRM')" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 20px;">📊</span>
+                            <span style="font-size: 14px; font-weight: 600; color: #2d3748;">AGENTE_CRM</span>
+                        </div>
+                        <span style="font-size: 11px; color: #48bb78; font-weight: 600;">● Ativo</span>
+                    </div>
+
+                    <div style="padding: 12px 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="editAgente('AGENTE_DADOS')" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 20px;">💾</span>
+                            <span style="font-size: 14px; font-weight: 600; color: #2d3748;">AGENTE_DADOS</span>
+                        </div>
+                        <span style="font-size: 11px; color: #48bb78; font-weight: 600;">● Ativo</span>
+                    </div>
+
+                    <div style="padding: 12px 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="editAgente('AGENTE_FECHAMENTO')" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 20px;">✅</span>
+                            <span style="font-size: 14px; font-weight: 600; color: #2d3748;">AGENTE_FECHAMENTO</span>
+                        </div>
+                        <span style="font-size: 11px; color: #48bb78; font-weight: 600;">● Ativo</span>
+                    </div>
+                </div>
                     <div class="agente-card active" onclick="editAgente('AGENTE_QUARTOS_ORCAMENTOS')">
                         <div class="agente-desc">Pedidos nos quartos 24h, cardápios completos A Sereia, Masi, Carybé e Bardot.</div>
                         <span class="agente-status ativo">● Ativo</span>
@@ -877,6 +1043,9 @@
                             <div class="agente-name">AGENTE_CONCIERGE_RESERVAS</div>
                         </div>
                         <div class="agente-desc">Experiências externas no Rio: restaurantes, tours, transporte, cultura e vida noturna.</div>
+                        <div style="margin-top: 12px; font-size: 11px; color: #718096;">
+                            <strong>Workflow:</strong> rSR6rUEGwgEWTrL8
+                        </div>
                         <span class="agente-status ativo">● Ativo</span>
                     </div>
 
@@ -886,6 +1055,9 @@
                             <div class="agente-name">AGENTE_CRM</div>
                         </div>
                         <div class="agente-desc">Análise comportamental, perfis de cliente, objeções e estratégias de fechamento.</div>
+                        <div style="margin-top: 12px; font-size: 11px; color: #718096;">
+                            <strong>Workflow:</strong> dfEOzW3WxLNYL0sF
+                        </div>
                         <span class="agente-status ativo">● Ativo</span>
                     </div>
 
@@ -895,6 +1067,9 @@
                             <div class="agente-name">AGENTE_DADOS</div>
                         </div>
                         <div class="agente-desc">Salvamento de reservas e consulta de dados na planilha "DADOS DOS CLIENTE".</div>
+                        <div style="margin-top: 12px; font-size: 11px; color: #718096;">
+                            <strong>Workflow:</strong> xcPuiL4eo3iCylco
+                        </div>
                         <span class="agente-status ativo">● Ativo</span>
                     </div>
 
@@ -904,15 +1079,9 @@
                             <div class="agente-name">AGENTE_FECHAMENTO</div>
                         </div>
                         <div class="agente-desc">Finalização de reservas, coleta de dados finais e processamento de pagamento.</div>
-                        <span class="agente-status ativo">● Ativo</span>
-                    </div>
-
-                    <div class="agente-card active" onclick="editAgente('AGENTE_PRINCIPAL')">
-                        <div class="agente-header">
-                            <div class="agente-icon">🌸</div>
-                            <div class="agente-name">FLORA - Agente Principal</div>
+                        <div style="margin-top: 12px; font-size: 11px; color: #718096;">
+                            <strong>Workflow:</strong> UdVDJahUMcdng0y4
                         </div>
-                        <div class="agente-desc">Orquestra todos os agentes, detecta contexto e direciona para especialistas corretos.</div>
                         <span class="agente-status ativo">● Ativo</span>
                     </div>
                 </div>
@@ -1176,62 +1345,67 @@
         let currentAgente = null;
         let supabaseInitialized = false;
 
-        // Dados dos Agentes (extraídos do seu workflow)
+        // Dados dos Agentes (extraídos do workflow n8n)
         const agentesData = {
             'AGENTE_QUARTOS_ORCAMENTOS': {
-                desc: 'Especialista em acomodações do Hotel Nacional Rio de Janeiro. Conhece todos os detalhes dos quartos e é responsável por sugerir as melhores opções para cada cliente.',
+                desc: 'Especialista em acomodações do Hotel Nacional. Conhece todos os 7 tipos de quarto e 413 acomodações disponíveis.',
                 workflow: 'Gb2xq3hE3JXACXI4',
-                prompt: 'Você é o especialista em acomodações...'
+                prompt: 'Você é o especialista em acomodações do Hotel Nacional Rio de Janeiro. Conhece todos os detalhes dos quartos e é responsável por sugerir as melhores opções para cada cliente.',
+                node: 'AGENTE_QUARTOS_ORCAMENTOS'
             },
             'AGENTE_INSTALACOES': {
-                desc: 'Especialista em instalações e serviços do Hotel Nacional Rio de Janeiro. Conhece todos os detalhes das facilidades disponíveis.',
+                desc: 'Gerencia piscina, Nacional Spa (220m²), Fitness (250m²), Kids Club e praia.',
                 workflow: 'IbwFax92rViUzI10',
-                prompt: 'Você é o especialista em instalações...'
+                prompt: 'Você é o especialista em instalações e serviços do Hotel Nacional Rio de Janeiro. Conhece todos os detalhes das facilidades disponíveis e orienta sobre horários, idades permitidas e condições de uso.',
+                node: 'AGENTE_INSTALACOES'
             },
             'AGENTE_GASTRONOMIA': {
-                desc: 'Especialista em experiências gastronômicas do Hotel Nacional Rio de Janeiro.',
+                desc: 'Restaurantes A Sereia (brasileira), Masi (nipo-brasileira), Carybé e Bardot.',
                 workflow: 'V9pbjQbOCxWcngfK',
-                prompt: 'Você é o especialista em gastronomia...'
+                prompt: 'Você é o especialista em experiências gastronômicas do Hotel Nacional Rio de Janeiro. Conhece todos os detalhes dos restaurantes, bares e suas especialidades, orientando sobre reservas e experiências únicas.',
+                node: 'AGENTE_GASTRONOMIA'
             },
             'AGENTE_EVENTOS': {
-                desc: 'Especialista em espaços para eventos do Hotel Nacional Rio de Janeiro.',
+                desc: 'Gerencia salões, capacidades, equipamentos AV e catering para eventos.',
                 workflow: 'bca5RZ9M9Jvf99FB',
-                prompt: 'Você é o especialista em eventos...'
+                prompt: 'Você é o especialista em espaços para eventos do Hotel Nacional Rio de Janeiro. Conhece todos os detalhes dos salões e é responsável por sugerir o espaço ideal para cada tipo de evento.',
+                node: 'AGENTE_EVENTOS'
             },
             'AGENTE_CHECKIN_CHECKOUT': {
-                desc: 'Especialista em check-in do Hotel Nacional Rio de Janeiro.',
+                desc: 'Processo completo de entrada/saída, horários 15h-12h, documentação e chaves digitais.',
                 workflow: 'j94E5J1e84yQ6WK3',
-                prompt: 'Você é o especialista em check-in...'
+                prompt: 'Você é o especialista em check-in do Hotel Nacional Rio de Janeiro. Conhece todos os detalhes do check-in e check-out do Hotel.',
+                node: 'AGENTE_CHECKIN_CHECKOUT'
             },
             'AGENTE_ROOM_SERVICE': {
-                desc: 'Especialista em room service do Hotel Nacional Rio de Janeiro.',
+                desc: 'Pedidos nos quartos 24h. Cardápios completos de todos os restaurantes.',
                 workflow: 'ZSykNY7i0tCi5ZW0',
-                prompt: 'Você é o especialista em room service...'
+                prompt: 'Você é o especialista em room service do Hotel Nacional Rio de Janeiro. Gerencia pedidos de comida, bebida e serviços nos quartos.',
+                node: 'AGENTE_ROOM_SERVICE'
             },
             'AGENTE_CONCIERGE_RESERVAS': {
-                desc: 'Especialista em concierge e reservas externas.',
+                desc: 'Experiências externas: restaurantes Rio, tours, transporte, cultura e vida noturna.',
                 workflow: 'rSR6rUEGwgEWTrL8',
-                prompt: 'Você é o especialista em concierge...'
+                prompt: 'Você é o especialista em concierge e experiências externas. Organiza tours, reservas em restaurantes externos, transporte e atividades culturais no Rio de Janeiro.',
+                node: 'AGENTE_CONCIERGE_RESERVAS'
             },
             'AGENTE_CRM': {
-                desc: 'Especialista em CRM e relacionamento com clientes.',
+                desc: 'Análise comportamental, perfis de cliente, objeções e estratégias de fechamento.',
                 workflow: 'dfEOzW3WxLNYL0sF',
-                prompt: 'Você é o especialista em CRM...'
+                prompt: 'Você é o especialista em CRM e relacionamento com clientes. Analisa dados, cria estratégias personalizadas e otimiza conversões através de insights comportamentais.',
+                node: 'AGENTE_CRM'
             },
             'AGENTE_DADOS': {
-                desc: 'Consulta os dados que estão sendo armazenados na planilha DADOS DOS CLIENTE.',
+                desc: 'Salvamento e consulta de dados na planilha "DADOS DOS CLIENTE".',
                 workflow: 'xcPuiL4eo3iCylco',
-                prompt: 'Você consulta os dados...'
+                prompt: 'Você consulta os dados que estão sendo armazenados na planilha "DADOS DOS CLIENTE".',
+                node: 'AGENTE_DADOS'
             },
             'AGENTE_FECHAMENTO': {
-                desc: 'Especialista em finalização de reservas do Hotel Nacional Rio de Janeiro.',
+                desc: 'Finalização de reservas, coleta de dados finais e processamento de pagamento.',
                 workflow: 'UdVDJahUMcdng0y4',
-                prompt: 'Você é o especialista em fechamento...'
-            },
-            'AGENTE_PRINCIPAL': {
-                desc: 'Flora - Agente principal que orquestra todos os outros agentes.',
-                workflow: 'jA4WGJa4trr1X9Rp',
-                prompt: 'Você é Flora, especialista em vendas e experiência completa do Hotel Nacional Rio de Janeiro...'
+                prompt: 'Você é o especialista em finalização de reservas do Hotel Nacional Rio de Janeiro. Sua função é coletar dados finais, processar pagamento e confirmar a reserva.',
+                node: 'AGENTE_FECHAMENTO'
             }
         };
 
@@ -1687,4 +1861,11 @@
                             <div class="agente-icon">🛎️</div>
                             <div class="agente-name">AGENTE_ROOM_SERVICE</div>
                         </div>
-                        <div class="ag
+                        <div class="agente-desc">Pedidos nos quartos 24h. Cardápios completos de todos os restaurantes.</div>
+                        <div style="margin-top: 12px; font-size: 11px; color: #718096;">
+                            <strong>Workflow:</strong> ZSykNY7i0tCi5ZW0
+                        </div>
+                        <span class="agente-status ativo">● Ativo</span>
+                    </div>
+                </div>
+            </div>
