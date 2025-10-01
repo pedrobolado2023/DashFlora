@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Nacional - Dashboard CRM</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #1a202c;
+            color: white;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            color: #63b3ed;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background: #2d3748;
+        }
+
+        .nav-item.active {
+            background: #3182ce;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #1a202c;
+        }
+
+        .config-btn {
+            background: #3182ce;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .config-btn:hover {
+            background: #2c5aa0;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1a202c;
+        }
+
+        .stat-card .change {
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .change.positive {
+            color: #48bb78;
+        }
+
+        .change.negative {
+            color: #f56565;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f7fafc;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #f7fafc;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+
+        .btn-primary {
+            background: #3182ce;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #2c5aa0;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        /* Charts */
+        .chart-container {
+            margin-top: 20px;
+            height: 300px;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #3182ce;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge.success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .badge.warning {
+            background: #feebc8;
+            color: #744210;
+        }
+
+        .badge.info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert.info {
+            background: #bee3f8;
+            color: #2c5282;
+            border: 1px solid #90cdf4;
+        }
+
+        .alert.warning {
+            background: #feebc8;
+            color: #744210;
+            border: 1px solid #fbd38d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">🏨 Hotel Nacional</div>
+            <nav>
+                <div class="nav-item active" onclick="showSection('dashboard')">
+                    📊 Dashboard
+                </div>
+                <div class="nav-item" onclick="showSection('leads')">
+                    👥 Leads/Clientes
+                </div>
+                <div class="nav-item" onclick="showSection('conversations')">
+                    💬 Conversas
+                </div>
+                <div class="nav-item" onclick="showSection('quartos')">
+                    🛏️ Quartos
+                </div>
+                <div class="nav-item" onclick="showSection('agentes')">
+                    🤖 Agentes IA
+                </div>
+                <div class="nav-item" onclick="showSection('configuracoes')">
+                    ⚙️ Configurações
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1 id="page-title">Dashboard</h1>
+                <button class="config-btn" onclick="openConfigModal()">Conectar Supabase</button>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total de Conversas</h3>
+                        <div class="value" id="total-conversations">-</div>
+                        <div class="change positive">+12% esta semana</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Novos Leads</h3>
+                        <div class="value" id="total-leads">-</div>
+                        <div class="change positive">+8% esta semana</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Taxa de Conversão</h3>
+                        <div class="value" id="conversion-rate">-</div>
+                        <div class="change negative">-2% esta semana</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Reservas Confirmadas</h3>
+                        <div class="value" id="confirmed-bookings">-</div>
+                        <div class="change positive">+15% esta semana</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="conversationsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Leads Section -->
+            <div id="leads" class="content-section">
+                <div class="alert info">
+                    Configure sua conexão com Supabase para visualizar os dados reais.
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>Status</th>
+                                <th>Data Criação</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leads-table">
+                            <tr>
+                                <td colspan="5" class="loading">
+                                    <div class="spinner"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Conversations Section -->
+            <div id="conversations" class="content-section">
+                <div class="alert info">
+                    Histórico de conversas será exibido aqui após conectar o banco de dados.
+                </div>
+                <div id="conversations-list"></div>
+            </div>
+
+            <!-- Quartos Section -->
+            <div id="quartos" class="content-section">
+                <button class="btn-primary" onclick="openQuartoModal()">+ Adicionar Quarto</button>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo de Quarto</th>
+                                <th>Preço Diária</th>
+                                <th>Disponibilidade</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quartos-table">
+                            <tr>
+                                <td>Standard</td>
+                                <td>R$ 450,00</td>
+                                <td><span class="badge success">Disponível</span></td>
+                                <td>
+                                    <button class="btn-secondary" onclick="editQuarto(1)">Editar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Deluxe</td>
+                                <td>R$ 650,00</td>
+                                <td><span class="badge success">Disponível</span></td>
+                                <td>
+                                    <button class="btn-secondary" onclick="editQuarto(2)">Editar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Suíte Master</td>
+                                <td>R$ 950,00</td>
+                                <td><span class="badge warning">Limitado</span></td>
+                                <td>
+                                    <button class="btn-secondary" onclick="editQuarto(3)">Editar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Agentes Section -->
+            <div id="agentes" class="content-section">
+                <div class="alert warning">
+                    Configurações dos agentes de IA. Altere com cuidado!
+                </div>
+                <div class="form-group">
+                    <label>AGENTE_QUARTOS_ORCAMENTOS - Prompt</label>
+                    <textarea rows="5" placeholder="Prompt do agente..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>AGENTE_INSTALACOES - Prompt</label>
+                    <textarea rows="5" placeholder="Prompt do agente..."></textarea>
+                </div>
+                <button class="btn-primary">Salvar Alterações</button>
+            </div>
+
+            <!-- Configurações Section -->
+            <div id="configuracoes" class="content-section">
+                <h2>Configurações do Sistema</h2>
+                
+                <div class="form-group">
+                    <label>Nome do Hotel</label>
+                    <input type="text" value="Hotel Nacional Rio de Janeiro">
+                </div>
+
+                <div class="form-group">
+                    <label>Horário Check-in</label>
+                    <input type="time" value="15:00">
+                </div>
+
+                <div class="form-group">
+                    <label>Horário Check-out</label>
+                    <input type="time" value="12:00">
+                </div>
+
+                <div class="form-group">
+                    <label>Email de Contato</label>
+                    <input type="email" value="contato@hotelnacional.com.br">
+                </div>
+
+                <div class="form-group">
+                    <label>Telefone</label>
+                    <input type="tel" value="(21) 3873-8200">
+                </div>
+
+                <button class="btn-primary">Salvar Configurações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Config Supabase -->
+    <div id="config-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configurar Supabase</h2>
+                <button class="close-modal" onclick="closeConfigModal()">×</button>
+            </div>
+            <div class="form-group">
+                <label>Supabase URL</label>
+                <input type="text" id="supabase-url" placeholder="https://seu-projeto.supabase.co">
+            </div>
+            <div class="form-group">
+                <label>Supabase Anon Key</label>
+                <input type="text" id="supabase-key" placeholder="sua-chave-anonima">
+            </div>
+            <button class="btn-primary" onclick="saveSupabaseConfig()">Conectar</button>
+            <button class="btn-secondary" onclick="closeConfigModal()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal Quarto -->
+    <div id="quarto-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Adicionar/Editar Quarto</h2>
+                <button class="close-modal" onclick="closeQuartoModal()">×</button>
+            </div>
+            <div class="form-group">
+                <label>Tipo de Quarto</label>
+                <input type="text" id="quarto-tipo" placeholder="Ex: Standard, Deluxe">
+            </div>
+            <div class="form-group">
+                <label>Preço por Diária (R$)</label>
+                <input type="number" id="quarto-preco" placeholder="450.00">
+            </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea id="quarto-desc" rows="4" placeholder="Descrição do quarto..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Disponibilidade</label>
+                <select id="quarto-disponibilidade">
+                    <option value="disponivel">Disponível</option>
+                    <option value="limitado">Limitado</option>
+                    <option value="indisponivel">Indisponível</option>
+                </select>
+            </div>
+            <button class="btn-primary" onclick="saveQuarto()">Salvar</button>
+            <button class="btn-secondary" onclick="closeQuartoModal()">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuração Supabase
+        let supabase = null;
+
+        // Carregar configuração salva
+        function loadSupabaseConfig() {
+            const url = localStorage.getItem('supabase_url');
+            const key = localStorage.getItem('supabase_key');
+            
+            if (url && key) {
+                supabase = window.supabase.createClient(url, key);
+                loadDashboardData();
+            }
+        }
+
+        // Salvar configuração Supabase
+        function saveSupabaseConfig() {
+            const url = document.getElementById('supabase-url').value;
+            const key = document.getElementById('supabase-key').value;
+            
+            if (!url || !key) {
+                alert('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            localStorage.setItem('supabase_url', url);
+            localStorage.setItem('supabase_key', key);
+            
+            supabase = window.supabase.createClient(url, key);
+            closeConfigModal();
+            loadDashboardData();
+            
+            alert('Conexão configurada com sucesso!');
+        }
+
+        // Carregar dados do dashboard
+        async function loadDashboardData() {
+            if (!supabase) return;
+            
+            try {
+                // Carregar total de leads
+                const { data: leads, error } = await supabase
+                    .from('dados_cliente')
+                    .select('*');
+                
+                if (error) throw error;
+                
+                document.getElementById('total-leads').textContent = leads.length;
+                
+                // Renderizar tabela de leads
+                renderLeadsTable(leads);
+                
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+            }
+        }
+
+        // Renderizar tabela de leads
+        function renderLeadsTable(leads) {
+            const tbody = document.getElementById('leads-table');
+            
+            if (!leads || leads.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">Nenhum lead encontrado</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = leads.map(lead => `
+                <tr>
+                    <td>${lead.nomewpp || 'N/A'}</td>
+                    <td>${lead.telefone || 'N/A'}</td>
+                    <td><span class="badge info">Novo</span></td>
+                    <td>${new Date(lead.created_at).toLocaleDateString('pt-BR')}</td>
+                    <td>
+                        <button class="btn-secondary" onclick="viewLead('${lead.id}')">Ver Detalhes</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Navegação
+        function showSection(sectionId) {
+            // Remover classe active de todas as seções
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remover classe active de todos os nav-items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Adicionar classe active na seção e nav-item correspondente
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Atualizar título
+            const titles = {
+                'dashboard': 'Dashboard',
+                'leads': 'Leads/Clientes',
+                'conversations': 'Conversas',
+                'quartos': 'Quartos',
+                'agentes': 'Agentes IA',
+                'configuracoes': 'Configurações'
+            };
+            
+            document.getElementById('page-title').textContent = titles[sectionId];
+        }
+
+        // Modais
+        function openConfigModal() {
+            document.getElementById('config-modal').classList.add('active');
+        }
+
+        function closeConfigModal() {
+            document.getElementById('config-modal').classList.remove('active');
+        }
+
+        function openQuartoModal() {
+            document.getElementById('quarto-modal').classList.add('active');
+        }
+
+        function closeQuartoModal() {
+            document.getElementById('quarto-modal').classList.remove('active');
+        }
+
+        function saveQuarto() {
+            // Implementar lógica de salvamento
+            alert('Quarto salvo com sucesso!');
+            closeQuartoModal();
+        }
+
+        function editQuarto(id) {
+            openQuartoModal();
+            // Carregar dados do quarto
+        }
+
+        function viewLead(id) {
+            alert('Visualizar lead: ' + id);
+        }
+
+        // Gráfico
+        const ctx = document.getElementById('conversationsChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    datasets: [{
+                        label: 'Conversas',
+                        data: [12, 19, 15, 25, 22, 30, 28],
+                        borderColor: '#3182ce',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Inicializar
+        loadSupabaseConfig();
+    </script>
+</body>
+</html>
