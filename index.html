@@ -769,6 +769,9 @@
                     <p id="page-subtitle">Visão geral do sistema Flora AI</p>
                 </div>
                 <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="disconnectSupabase()">
+                        🔌 Desconectar
+                    </button>
                     <button class="btn btn-secondary" onclick="refreshData()">
                         🔄 Atualizar
                     </button>
@@ -1517,9 +1520,24 @@
             }
         }
 
+        // Desconectar do Supabase
+        function disconnectSupabase() {
+            if (confirm('Tem certeza que deseja desconectar do Supabase?')) {
+                localStorage.removeItem('supabase_url');
+                localStorage.removeItem('supabase_key');
+                supabase = null;
+                supabaseInitialized = false;
+                updateConnectionStatus(false);
+                location.reload();
+            }
+        }
+
         function refreshData() {
-            loadDashboardData();
-            alert('🔄 Dados atualizados!');
+            if (supabase && supabaseInitialized) {
+                loadDashboardData();
+            } else {
+                location.reload();
+            }
         }
 
         function viewLead(id) {
