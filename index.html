@@ -1102,16 +1102,24 @@
                 <h2>⚡ Conectar Supabase</h2>
                 <button class="close-modal" onclick="closeConfigModal()">×</button>
             </div>
-            <div class="alert info">
-                Conecte-se ao seu Supabase para visualizar dados reais de leads e conversas.
+            <div class="alert warning">
+                <strong>⚠️ Problema com Anon Key</strong><br>
+                Se o erro persistir, você precisa usar a <strong>Service Role Key</strong>:<br><br>
+                <strong>1.</strong> No Supabase, vá em: <strong>Settings → API</strong><br>
+                <strong>2.</strong> Copie a chave <strong>"service_role"</strong> (não a "anon")<br>
+                <strong>3.</strong> Cole aqui ao conectar<br><br>
+                ⚠️ <strong>IMPORTANTE:</strong> Service Role Key tem acesso total. Use apenas para este dashboard privado.
             </div>
             <div class="form-group">
                 <label>Supabase URL</label>
                 <input type="text" id="supabase-url" placeholder="https://seu-projeto.supabase.co">
             </div>
             <div class="form-group">
-                <label>Supabase Anon Key</label>
-                <input type="password" id="supabase-key" placeholder="sua-chave-anonima">
+                <label>Supabase Key (Anon ou Service Role)</label>
+                <input type="password" id="supabase-key" placeholder="sua-chave">
+                <small style="display: block; margin-top: 8px; color: #718096;">
+                    Use <strong>service_role</strong> key se anon key não funcionar
+                </small>
             </div>
             <div style="margin-top: 30px;">
                 <button class="btn btn-primary" onclick="saveSupabaseConfig()">🔌 Conectar</button>
