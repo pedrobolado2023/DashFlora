@@ -1294,16 +1294,26 @@
 
         // Carregar dados do dashboard
         async function loadDashboardData() {
-            if (!supabase) return;
+            if (!supabase) {
+                // Modo offline - usar dados mockados
+                loadMockData();
+                return;
+            }
             
             try {
-                // Carregar leads
+                // Tentar carregar do Supabase
                 const { data: leads, error } = await supabase
                     .from('dados_cliente')
                     .select('*')
                     .order('created_at', { ascending: false });
                 
-                if (error) throw error;
+                if (error) {
+                    console.error('Erro Supabase:', error);
+                    // Se falhar, usar dados mockados
+                    loadMockData();
+                    showPermissionAlert();
+                    return;
+                }
                 
                 // Atualizar estatísticas
                 document.getElementById('total-leads').textContent = leads.length;
@@ -1320,7 +1330,70 @@
                 
             } catch (error) {
                 console.error('Erro ao carregar dados:', error);
-                alert('❌ Erro ao carregar dados: ' + error.message);
+                loadMockData();
+                showPermissionAlert();
+            }
+        }
+
+        // Carregar dados mockados (para demonstração)
+        function loadMockData() {
+            const mockLeads = [
+                {
+                    id: '1',
+                    nomewpp: 'Maria Silva',
+                    telefone: '5521999887766',
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: '2',
+                    nomewpp: 'João Santos',
+                    telefone: '5521988776655',
+                    created_at: new Date(Date.now() - 86400000).toISOString()
+                },
+                {
+                    id: '3',
+                    nomewpp: 'Ana Costa',
+                    telefone: '5521977665544',
+                    created_at: new Date(Date.now() - 172800000).toISOString()
+                },
+                {
+                    id: '4',
+                    nomewpp: 'Pedro Oliveira',
+                    telefone: '5521966554433',
+                    created_at: new Date(Date.now() - 259200000).toISOString()
+                },
+                {
+                    id: '5',
+                    nomewpp: 'Carla Mendes',
+                    telefone: '5521955443322',
+                    created_at: new Date(Date.now() - 345600000).toISOString()
+                }
+            ];
+
+            document.getElementById('total-leads').textContent = mockLeads.length;
+            document.getElementById('conversas-hoje').textContent = '3';
+            renderLeadsTable(mockLeads);
+        }
+
+        // Mostrar alerta de permissão
+        function showPermissionAlert() {
+            const alertHtml = `
+                <div class="alert warning" style="margin: 20px 0;">
+                    <strong>⚠️ Sem permissão no Supabase</strong><br>
+                    Os dados abaixo são exemplos. Para ver dados reais:<br><br>
+                    <strong>1.</strong> Acesse seu Supabase → SQL Editor<br>
+                    <strong>2.</strong> Execute:<br>
+                    <code style="display: block; background: #2d3748; color: #63b3ed; padding: 12px; border-radius: 8px; margin-top: 8px;">
+                        ALTER TABLE dados_cliente ENABLE ROW LEVEL SECURITY;<br>
+                        CREATE POLICY "Public read" ON dados_cliente FOR SELECT USING (true);
+                    </code>
+                </div>
+            `;
+            
+            const leadsSection = document.getElementById('leads');
+            const firstCard = leadsSection.querySelector('.content-card');
+            if (firstCard && !firstCard.querySelector('.warning')) {
+                firstCard.insertAdjacentHTML('afterbegin', alertHtml);
             }
         }
 
