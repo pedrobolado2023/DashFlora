@@ -1163,6 +1163,7 @@
         // Configuração Global
         let supabase = null;
         let currentAgente = null;
+        let supabaseInitialized = false;
 
         // Dados dos Agentes (extraídos do seu workflow)
         const agentesData = {
@@ -1228,9 +1229,10 @@
             const url = localStorage.getItem('supabase_url');
             const key = localStorage.getItem('supabase_key');
             
-            if (url && key) {
+            if (url && key && !supabaseInitialized) {
                 try {
                     supabase = window.supabase.createClient(url, key);
+                    supabaseInitialized = true;
                     updateConnectionStatus(true);
                     loadDashboardData();
                 } catch (error) {
@@ -1265,15 +1267,25 @@
             }
             
             try {
+                // Limpar instância antiga se existir
+                if (supabase) {
+                    supabase = null;
+                    supabaseInitialized = false;
+                }
+                
                 localStorage.setItem('supabase_url', url);
                 localStorage.setItem('supabase_key', key);
                 
                 supabase = window.supabase.createClient(url, key);
+                supabaseInitialized = true;
                 updateConnectionStatus(true);
                 closeConfigModal();
-                loadDashboardData();
                 
-                alert('✅ Conexão configurada com sucesso!');
+                alert('✅ Conexão configurada! Agora configure as permissões no Supabase.\n\nVá em: SQL Editor e execute:\n\nALTER TABLE dados_cliente ENABLE ROW LEVEL SECURITY;\n\nCREATE POLICY "Enable read access for all users" ON dados_cliente FOR SELECT USING (true);');
+                
+                // Tentar carregar dados
+                setTimeout(() => loadDashboardData(), 1000);
+                
             } catch (error) {
                 alert('❌ Erro ao conectar: ' + error.message);
                 updateConnectionStatus(false);
