@@ -1481,7 +1481,53 @@
                             data: [65, 42, 38, 25, 18],
                             backgroundColor: [
                                 'rgba(102, 126, 234, 0.8)',
-                                'rgba(118, 75, 162, 0.8)',ente-header">
+                                'rgba(118, 75, 162, 0.8)',
+                                'rgba(72, 187, 120, 0.8)',
+                                'rgba(237, 137, 54, 0.8)',
+                                'rgba(49, 130, 206, 0.8)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSupabaseConfig();
+            initCharts();
+            
+            // Carregar configurações salvas
+            const savedConfig = localStorage.getItem('hotel_config');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+                document.getElementById('config-nome-hotel').value = config.nomeHotel || '';
+                document.getElementById('config-email').value = config.email || '';
+                document.getElementById('config-telefone').value = config.telefone || '';
+                document.getElementById('config-endereco').value = config.endereco || '';
+                document.getElementById('config-checkin').value = config.checkin || '15:00';
+                document.getElementById('config-checkout').value = config.checkout || '12:00';
+                document.getElementById('config-cafe-inicio').value = config.cafeInicio || '06:00';
+                document.getElementById('config-cafe-fim').value = config.cafeFim || '10:00';
+            }
+        });
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>ente-header">
                             <div class="agente-icon">🛏️</div>
                             <div class="agente-name">AGENTE_QUARTOS_ORCAMENTOS</div>
                         </div>
